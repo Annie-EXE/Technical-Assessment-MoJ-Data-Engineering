@@ -11,7 +11,7 @@ def sum_current_time(time_str: str) -> int:
     time_str = time_str.replace(" ", "")
     time_str = time_str.strip()
 
-    if time_str.strip(" ") == "":
+    if time_str == "":
         raise ValueError("Invalid input - time string must not be empty")
 
     list_of_strings = time_str.split(":")
