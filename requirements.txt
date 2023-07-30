@@ -1,0 +1,7 @@
+pytest
+python-dateutil
+pylint
+pytest_cov
+requests
+requests_mock
+json
