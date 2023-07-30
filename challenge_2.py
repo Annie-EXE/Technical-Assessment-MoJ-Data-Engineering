@@ -121,7 +121,7 @@ def process_csv_row(row: list) -> dict:
 def get_nearest_relevant_court(court_type: str, court_list_data: list) -> dict:
     """
     Returns information on the relevant nearest court, given a
-    postcode and court type. Presents information in a user-friendly way.
+    a list of courts and a desired court type
     """
     court_type = court_type.title()
 
@@ -133,14 +133,22 @@ def get_nearest_relevant_court(court_type: str, court_list_data: list) -> dict:
 
 
 def get_court_list_from_API(postcode: str) -> list[dict]:
-
+    """
+    Connects to the API, supplies the postcode, and retrieves
+    the ten nearest courts
+    Returns this data in JSON format
+    """
     response = requests.get(f"https://courttribunalfinder.service.gov.uk/search/results.json?postcode={postcode}")
     court_list_data = response.json()
     return court_list_data
 
 
 def get_list_of_relevant_courts(court_list: list, court_type) -> list[dict]:
-
+    """
+    Filters a list of courts
+    Returns a list of courts which are all of the 
+    requested type
+    """
     relevant_courts = []
 
     for court in court_list:
@@ -153,7 +161,10 @@ def get_list_of_relevant_courts(court_list: list, court_type) -> list[dict]:
 
 
 def get_nearest_court_from_list(court_list: list) -> dict:
-
+    """
+    Sorts a list of courts (each of which is
+    represented as a dictionary) by distance
+    """
     closest_court = min(court_list, key=lambda x: x["distance"])
 
     return closest_court

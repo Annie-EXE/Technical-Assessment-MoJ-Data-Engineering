@@ -15,12 +15,16 @@
 
 ## Challenge 2
 
-- My approach was to first create a function which extracts each individual's data from `people.csv`, and creates a list of dictionaries (where each list is one person's data)
-- I then created a function which takes a postcode and a court type, and returns the nearest court of the specified type
-- I then called this function for each person in my data list
 - My `get_data_from_csv()` function takes a file path as an argument, to increase code reusability
 - I created the helper function `process_csv_row()` to improve testability
-- In the `get_nearest_relevant_court()`, I created a list of relevant courts (courts of the correct type within the top 10 closest courts) so that the functionality to display a list of options to an individual can be implemented easily
+- In the `get_nearest_relevant_court()`, I created a list of relevant courts (courts of the correct type within the top 10 closest courts) so that the functionality to display a list of options to an individual can be implemented easily'
+- I added two helper functions and then called them in `get_nearest_relevant_court()`, one of which filters a list of courts for the required type, and the other identifies the nearest court from a list o courts. Splitting up functionality increases code reusability and testability
 - The task description mentions that the API request returns the ten nearest courts to a postcode, but does not specify that these are ordered by distance to the postcode. Although this is the pattern I have observed while interacting with the API, I have still designed my code to ensure that my selected court is the _nearest_ appropriate court
 - I am making the assumption that 'distance' is measured in miles, based on typing court names into Google Maps
 - Finally, I made the `generate_output()` function, which accepts one individual's data as a dictionary, then calls the `get_nearest_relevant_court()` function on this data. It prints the relevant data in a user-friendly way
+
+## Challenge 3
+
+- The first issue I noticed with the current code is the lack of error handling
+- I then noticed that the code attempts to sum strings, when sum() is for numeric values - leading to a TypeError
+- The latter issue can be remedied by creating a new list with each segment of the string converted to an integer, so the bulk of this task will be identifying and handling edge cases (then testing)
