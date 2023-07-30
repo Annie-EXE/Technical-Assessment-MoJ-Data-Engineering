@@ -140,5 +140,4 @@ if __name__ == "__main__": #pragma: no cover
     people_data = get_data_from_csv("people.csv")
 
     for person_data in people_data:
-        print(person_data)
         print(generate_output(person_data))
