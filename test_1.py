@@ -23,10 +23,10 @@ def is_log_line(line: str) -> bool:
 
         if not validate_timestamp(timestamp_str):
             return False
-        
+
         if log_level.lower() not in ["info", "trace", "warning"]:
             return False
-        
+
         if not message or message[0] != ":":
             return False
 
@@ -34,12 +34,13 @@ def is_log_line(line: str) -> bool:
 
     except ValueError:
         return False
-    
+
     except TypeError:
         return False
-    
+
     except AttributeError:
         return False
+
 
 def validate_timestamp(timestamp_str: str) -> bool:
     """Returns 'True' if a string is found to be a timestamp"""
@@ -64,7 +65,6 @@ def get_dict(line: str) -> dict:
     line_segments = line.split(" ")
 
     timestamp_str = " ".join(line_segments[:2])
-    timestamp = parse(timestamp_str)
     log_level = line_segments[2]
     message = " ".join(line_segments[3:]).strip()
 
@@ -78,12 +78,14 @@ if __name__ == "__main__": #pragma: no cover
     # these are basic generators that will return
     # 1 line of the log file at a time
     def log_parser_step_1(log_file):
+        """-"""
         f = open(log_file)
         for line in f:
             if is_log_line(line):
                 yield line
 
     def log_parser_step_2(log_file):
+        """-"""
         f = open(log_file)
         for line in f:
             if is_log_line(line):

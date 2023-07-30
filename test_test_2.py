@@ -2,7 +2,7 @@ import pytest
 import csv
 import requests
 import requests_mock
-from challenge_2 import get_data_from_csv, process_csv_row, get_nearest_relevant_court, generate_output, get_list_of_relevant_courts, get_nearest_court_from_list, get_court_list_from_API
+from test_2 import get_data_from_csv, process_csv_row, get_nearest_relevant_court, generate_output, get_list_of_relevant_courts, get_nearest_court_from_list, get_court_list_from_api
 import json
 from unittest.mock import patch
 
@@ -129,9 +129,9 @@ def test_get_nearest_relevant_court():
     assert result['name'] == 'Norwich Social Security and Child Support Tribunal'
 
 
-# The following tests are for get_court_list_from_API():
+# The following tests are for get_court_list_from_api():
 
-def test_get_court_list_from_API():
+def test_get_court_list_from_api():
     """
     Tests that the function retrieves a list of dictionaries,
     where each dictionary holds information about a specific
@@ -146,7 +146,7 @@ def test_get_court_list_from_API():
 
         m.get(f"https://courttribunalfinder.service.gov.uk/search/results.json?postcode={postcode}", json=court_list)
 
-        result = get_court_list_from_API(postcode)
+        result = get_court_list_from_api(postcode)
 
     expected_result = court_list
 
@@ -238,14 +238,14 @@ def test_generate_output_returns_string():
     with open("test_data_challenge_2.txt", 'r') as file:
         court_list = json.load(file)
 
-    with patch("challenge_2.get_court_list_from_API", return_value=court_list):
+    with patch("test_2.get_court_list_from_api", return_value=court_list):
 
         result = generate_output({'name': 'Guido Van Rossum', 'postcode': 'NR162HE', 'court_type': 'Tribunal'})
 
     assert isinstance(result, str)
 
 
-def test_generate_output_returns_court_output():
+def test_generate_output_returns_correct_output():
     """
     Tests that the result contains the correct
     and required information
@@ -253,7 +253,7 @@ def test_generate_output_returns_court_output():
     with open("test_data_challenge_2.txt", 'r') as file:
         court_list = json.load(file)
 
-    with patch("challenge_2.get_court_list_from_API", return_value=court_list):
+    with patch("test_2.get_court_list_from_api", return_value=court_list):
 
         result = generate_output({'name': 'Guido Van Rossum', 'postcode': 'NR162HE', 'court_type': 'Tribunal'})
 

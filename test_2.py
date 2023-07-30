@@ -2,76 +2,6 @@ import csv
 import requests
 import json
 
-# A team of analysts wish to discover how far people are travelling to their nearest
-# desired court. We have provided you with a small test dataset so you can find out if
-# it is possible to give the analysts the data they need to do this. The data is in
-# `people.csv` and contains the following columns:
-# - person_name
-# - home_postcode
-# - looking_for_court_type
-
-# The courts and tribunals finder API returns a list of the 10 nearest courts to a
-# given postcode. The output is an array of objects in JSON format. The API is
-# accessed by including the postcode of interest in a URL. For example, accessing
-# https://courttribunalfinder.service.gov.uk/search/results.json?postcode=E144PU gives
-# the 10 nearest courts to the postcode E14 4PU. Visit the link to see an example of
-# the output.
-
-# Below is the first element of the JSON array from the above API call. We only want the
-# following keys from the json:
-# - name
-# - dx_number
-# - distance
-# dx_number is not always returned and the "types" field can be empty.
-
-"""
-[
-    {
-        "name": "Central London Employment Tribunal",
-        "lat": 51.5158158439741,
-        "lon": -0.118745425821452,
-        "number": null,
-        "cci_code": null,
-        "magistrate_code": null,
-        "slug": "central-london-employment-tribunal",
-        "types": [
-            "Tribunal"
-        ],
-        "address": {
-            "address_lines": [
-                "Victory House",
-                "30-34 Kingsway"
-            ],
-            "postcode": "WC2B 6EX",
-            "town": "London",
-            "type": "Visiting"
-        },
-        "areas_of_law": [
-            {
-                "name": "Employment",
-                "external_link": "https%3A//www.gov.uk/courts-tribunals/employment-tribunal",
-                "display_url": "<bound method AreaOfLaw.display_url of <AreaOfLaw: Employment>>",
-                "external_link_desc": "Information about the Employment Tribunal"
-            }
-        ],
-        "displayed": true,
-        "hide_aols": false,
-        "dx_number": "141420 Bloomsbury 7",
-        "distance": 1.29
-    },
-    etc
-]
-"""
-
-# Use this API and the data in people.csv to determine how far each person's nearest
-# desired court is. Generate an output (of whatever format you feel is appropriate)
-# showing, for each person:
-# - name
-# - type of court desired
-# - home postcode
-# - nearest court of the right type
-# - the dx_number (if available) of the nearest court of the right type
-# - the distance to the nearest court of the right type
 
 def get_data_from_csv(file_path: str) -> list:
     """
@@ -93,7 +23,7 @@ def get_data_from_csv(file_path: str) -> list:
             if data is not None:
 
                 people_data.append(data)
-            
+
         return people_data
 
 
@@ -112,10 +42,12 @@ def process_csv_row(row: list) -> dict:
         }
 
         return data
-    
+
     except IndexError:
 
         print("Skipped invalid row: {row}")
+
+        return
 
 
 def get_nearest_relevant_court(court_type: str, court_list_data: list) -> dict:
@@ -132,7 +64,7 @@ def get_nearest_relevant_court(court_type: str, court_list_data: list) -> dict:
     return closest_relevant_court
 
 
-def get_court_list_from_API(postcode: str) -> list[dict]:
+def get_court_list_from_api(postcode: str) -> list[dict]:
     """
     Connects to the API, supplies the postcode, and retrieves
     the ten nearest courts
@@ -176,7 +108,7 @@ def generate_output(person_data: dict) -> str:
     Identifies their nearest court of the right type
     Prints the information in a readable way to the console
     """
-    court_list_data = get_court_list_from_API(person_data['postcode'])
+    court_list_data = get_court_list_from_api(person_data['postcode'])
 
     closest_relevant_court = get_nearest_relevant_court(person_data['court_type'], court_list_data)
 
@@ -190,14 +122,14 @@ def generate_output(person_data: dict) -> str:
     person_name = person_data['name']
     court_type = person_data['court_type']
     postcode = person_data['postcode']
-    
+
 
     output_string = f"""\n{person_name}, the nearest {court_type} to your postcode ({postcode})
         is {court_name} ({distance} miles away). \n\n"""
-    
+
     if dx_number:
         output_string += f"""The dx_number of this court is {dx_number}. \n\n"""
-    
+
     output_string += "--------------------------------- \n"
 
     return output_string
@@ -206,7 +138,7 @@ def generate_output(person_data: dict) -> str:
 if __name__ == "__main__": #pragma: no cover
 
     people_data = get_data_from_csv("people.csv")
-    
+
     for person_data in people_data:
         print(person_data)
         print(generate_output(person_data))

@@ -1,5 +1,5 @@
 import pytest
-from challenge_1 import is_log_line, validate_timestamp, get_dict
+from test_1 import is_log_line, validate_timestamp, get_dict
 from dateutil.parser import parse
 
 
