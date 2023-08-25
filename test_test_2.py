@@ -140,7 +140,8 @@ def test_get_court_list_from_api():
     with open("test_data_challenge_2.txt", 'r') as file:
         court_list = json.load(file)
 
-    postcode = "NR162HE"
+    # postcode = "NR162HE"
+    postcode = "E4 6HJ"
 
     with requests_mock.Mocker() as m:
 
